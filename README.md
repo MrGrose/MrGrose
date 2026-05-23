@@ -44,13 +44,5 @@ I build production-ready services with clear architecture and measurable perform
 
 ## Contacts
 
-- Email: [grachev.ro@gmail.com](mailto:grachev.ro@gmail.com)
-- Telegram: [@RGrachev](https://t.me/RGrachev)
-- GitHub: [MrGrose](https://github.com/MrGrose)
+- Email: [grachev.backend@gmail.com](mailto:grachev.backend@gmail.com)
 
----
-
-## Languages
-
-- Russian - Native
-- English - B2
