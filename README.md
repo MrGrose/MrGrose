@@ -1,44 +1,88 @@
-# Hi, I'm MrGrose
+## Hi, I'm Roman
+### Python Backend Developer | FastAPI · Django · PostgreSQL | AI/LLM Integrations
 
-Python Backend Developer focused on APIs, microservices, and data-driven products.
-I build production-ready services with clear architecture and measurable performance improvements.
+I build backend systems, APIs, and integrations for business applications. My experience includes commercial CRM development and independently building and maintaining production e-commerce and B2B platforms.
+
+I focus on reliable business logic, database performance, asynchronous processing, external integrations, and maintainable architecture.
 
 ---
 
 ## About Me
 
-- Backend developer with commercial and project experience in Python ecosystem.
-- Main focus: `Django`, `FastAPI`, `PostgreSQL`, `Redis`, async workflows, and integrations.
-- I value clean architecture, reliability, and simple maintainable solutions.
+- Commercial experience developing Python backends for CRM and business applications.
+- Build and maintain production applications with FastAPI, Django, PostgreSQL, and Redis.
+- Design REST APIs, database schemas, background processing, payment workflows, and external service integrations.
+- Have hands-on project experience integrating LLMs, building RAG pipelines, and implementing vector search.
+- Handle the full development cycle: architecture, implementation, testing, Docker deployment, and production support.
 
 ---
 
 ## Tech Stack
 
-- **Backend:** Python, Django, DRF, FastAPI, SQLAlchemy, Aiogram
-- **Data:** PostgreSQL, Redis, ETL, parsing, analytics
-- **Infra:** Docker, Docker Compose, Linux, Nginx, Gunicorn, Kubernetes (basic)
-- **Engineering:** REST API, OpenAPI/Swagger, Asyncio, Celery, RabbitMQ, CI/CD
-
----
-
-## Key Achievements
-
-- Built and shipped multiple production-like backends with `FastAPI` and `Django` (`PillStore`, `Url shortener`, `PythonMeetup_Bot`).
-- Implemented real-time and async architectures (`AIStream-Chat` with `WebSocket`, async service workflows).
-- Developed AI features in real products: local `RAG` assistant (`NutriBot`) and NL-to-SQL analytics bot (`video-analytics-bot`).
-- Designed full delivery cycle: API design, database modeling (`PostgreSQL`), containerization (`Docker`), and integrations (`Telegram`, external services).
+- **Backend:** Python, FastAPI, Django, Django REST Framework, SQLAlchemy, Pydantic, asyncio
+- **Databases & Search:** PostgreSQL, Redis, Qdrant, FAISS
+- **Background Processing:** RQ, ARQ, async workers, scheduled jobs
+- **Integrations:** REST API, HTTPX, aiohttp, Playwright, aiogram
+- **AI / LLM:** LangChain, LiteLLM, RAG, embeddings, vector search, DeepSeek, OpenRouter, Ollama
+- **Infrastructure:** Docker, Docker Compose, Linux, Nginx, GitHub Actions, GitLab CI/CD
+- **Engineering:** pytest, Alembic, Ruff, OpenAPI, Git
 
 ---
 
 ## Featured Projects
 
-- [PillStore](https://github.com/MrGrose/PillStore) - E-commerce backend on FastAPI: auth, cart, orders, admin, Telegram Mini App integration.
-- [AIStream-Chat](https://github.com/MrGrose/AIStream-Chat) - Real-time AI chat on FastAPI + WebSocket with low-latency streaming responses.
-- [NutriBot](https://github.com/MrGrose/NutriBot) - Local RAG assistant for nutrition Q&A over uploaded documents and knowledge base.
-- [Url shortener](https://github.com/MrGrose/Url-shortener) - Bitly-like URL shortener on FastAPI/PostgreSQL with redirects and click analytics.
-- [video-analytics-bot](https://github.com/MrGrose/video-analytics-bot) - Telegram bot that converts natural language questions into SQL analytics.
-- [PythonMeetup_Bot](https://github.com/MrGrose/PythonMeetup_Bot) - Django + Telegram bot for managing offline Python community events.
+### [Shopstore](https://github.com/MrGrose/Shopstore)
+*Production e-commerce backend for a sports equipment store.*
+- Built and maintain a store with approximately 13,000 products on the storefront and 17,000 product records in the database.
+- Designed the backend with FastAPI, async SQLAlchemy, PostgreSQL, Redis, and RQ.
+- Implemented order processing, inventory availability, supplier integrations, and delivery tracking.
+- Integrated SBP QR payments with idempotent callbacks and payment status reconciliation.
+- Implemented reliable background notifications using the transactional outbox pattern.
+- Added concurrency control for catalog imports, order creation, and inventory operations.
+- Built an admin interface and Telegram Mini App on top of the same backend.
+- Deployed and maintain the application using Docker Compose.
+
+### [B2B-Commerce](https://github.com/MrGrose/B2B-commerce)
+*B2B wholesale commerce platform.*
+- Designed a modular monolith with FastAPI, async SQLAlchemy, and PostgreSQL.
+- Implemented company accounts, product catalog, invoices, inventory, payments, and financial reports.
+- Built inventory reservations with PostgreSQL row-level locking to prevent overselling.
+- Implemented idempotent payment operations and invoice expiration workflows.
+- Added audit logging, authentication, and security controls.
+- Configured background jobs with ARQ and Redis.
+- Set up CI/CD with GitHub Actions and automated deployment to a VPS.
+
+### [Video Analytics Bot](https://github.com/MrGrose/video-analytics-bot)
+*Telegram bot for querying analytics using natural language.*
+- Integrated DeepSeek to convert natural-language questions into SQL queries.
+- Connected the bot to PostgreSQL for analytics data retrieval.
+- Built the application using Python and aiogram.
+
+
+
+### [NutriBot](https://github.com/MrGrose/NutriBot)
+*Local RAG assistant for document-based question answering.*
+- Built a document retrieval pipeline using LangChain and FAISS.
+- Processed uploaded documents, generated embeddings, and retrieved relevant context.
+- Used local language models through Ollama to generate answers based on retrieved information.
+
+### [Pillstore]()
+*E-commerce backend built with FastAPI.*
+- Developed backend functionality for an online store, including user authentication, shopping cart, and order management.
+- Implemented administrative functionality for managing store operations.
+- Integrated Telegram Mini App with the backend.
+- Built API endpoints to support storefront functionality and user interactions.
+
+---
+### Engineering Focus
+
+I am particularly interested in:
+  - Backend architecture and domain-driven business logic.
+  - Reliable payment and order processing.
+  - Database performance and transaction management.
+  - Asynchronous systems and background job processing.
+  - API integrations and automation.
+  - Practical applications of LLMs and retrieval-augmented generation.
 
 ---
 
