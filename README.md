@@ -1,92 +1,110 @@
-## Hi, I'm Roman
 ### Python Backend Developer | FastAPI · Django · PostgreSQL | AI/LLM Integrations
 
-I build backend systems, APIs, and integrations for business applications. My experience includes commercial CRM development and independently building and maintaining production e-commerce and B2B platforms.
+## Обо мне
+Разрабатываю backend-системы, API и интеграции для бизнес-приложений. Есть коммерческий опыт разработки CRM-платформы и собственные проекты в e-commerce, B2B и AI/LLM.
 
-I focus on reliable business logic, database performance, asynchronous processing, external integrations, and maintainable architecture.
+В работе уделяю внимание бизнес-логике, надёжности данных, производительности PostgreSQL и качеству архитектуры.
 
----
-
-## About Me
-
-- Commercial experience developing Python backends for CRM and business applications.
-- Build and maintain production applications with FastAPI, Django, PostgreSQL, and Redis.
-- Design REST APIs, database schemas, background processing, payment workflows, and external service integrations.
-- Have hands-on project experience integrating LLMs, building RAG pipelines, and implementing vector search.
-- Handle the full development cycle: architecture, implementation, testing, Docker deployment, and production support.
-
----
-
-## Tech Stack
-
-- **Backend:** Python, FastAPI, Django, Django REST Framework, SQLAlchemy, Pydantic, asyncio
-- **Databases & Search:** PostgreSQL, Redis, Qdrant, FAISS
-- **Background Processing:** RQ, ARQ, async workers, scheduled jobs
-- **Integrations:** REST API, HTTPX, aiohttp, Playwright, aiogram
-- **AI / LLM:** LangChain, LiteLLM, RAG, embeddings, vector search, DeepSeek, OpenRouter, Ollama
-- **Infrastructure:** Docker, Docker Compose, Linux, Nginx, GitHub Actions, GitLab CI/CD
-- **Engineering:** pytest, Alembic, Ruff, OpenAPI, Git
-
----
-
-## Featured Projects
+## Основные проекты
 
 ### [Shopstore](https://github.com/MrGrose/Shopstore)
-*Production e-commerce backend for a sports equipment store.*
-- Built and maintain a store with approximately 13,000 products on the storefront and 17,000 product records in the database.
-- Designed the backend with FastAPI, async SQLAlchemy, PostgreSQL, Redis, and RQ.
-- Implemented order processing, inventory availability, supplier integrations, and delivery tracking.
-- Integrated SBP QR payments with idempotent callbacks and payment status reconciliation.
-- Implemented reliable background notifications using the transactional outbox pattern.
-- Added concurrency control for catalog imports, order creation, and inventory operations.
-- Built an admin interface and Telegram Mini App on top of the same backend.
-- Deployed and maintain the application using Docker Compose.
+**Интернет-магазин спортивного инвентаря · production-проект**
+
+Самостоятельно спроектировал и развиваю backend интернет-магазина. На витрине около **13 000 товаров**, в базе данных — около **17 000 записей о товарах**. В проект входят каталог, заказы, оплата по СБП, Telegram Mini App, операторская админка и интеграции с внешними сервисами.
+
+- Разделил жизненные циклы заказа, оплаты и поставки: их статусы управляются независимо.
+- Реализовал оплату по СБП: QR-код с ограниченным сроком действия, несколько попыток оплаты, идемпотентная обработка callback и сверка статусов с платёжным шлюзом.
+- Внедрил **transactional outbox** для Telegram-уведомлений: событие сохраняется в PostgreSQL вместе с бизнес-операцией, а отдельный worker доставляет его с помощью `FOR UPDATE SKIP LOCKED` и повторных попыток.
+- Реализовал конкурентный импорт каталога поставщика: атомарный захват товара в PostgreSQL и Redis-lock защищают от повторной обработки одного SKU разными worker-процессами.
+- Настроил версионирование Redis-кэша через `INCR` и fallback на PostgreSQL при недоступности Redis.
+- Разработал операторскую админку с отдельными очередями проверки наличия, сборки заказов и отслеживания доставки.
+- Подготовил Docker Compose-инфраструктуру, health/readiness-проверки, резервное копирование PostgreSQL и CI на GitHub Actions.
+- Использовал Blue/Green Deployment для обновления приложения; организовал хранение и раздачу медиа через SeaweedFS с CDN-кешированием.
+- Тестовая база включает более **200 файлов pytest** с unit-, integration- и e2e-сценариями.
+
+**Стек:** Python, FastAPI, SQLAlchemy (async), PostgreSQL, Alembic, Redis, RQ, Pydantic, aiogram, aiohttp, Playwright, Docker Compose, GitHub Actions, pytest.
 
 ### [B2B-Commerce](https://github.com/MrGrose/B2B-commerce)
-*B2B wholesale commerce platform.*
-- Designed a modular monolith with FastAPI, async SQLAlchemy, and PostgreSQL.
-- Implemented company accounts, product catalog, invoices, inventory, payments, and financial reports.
-- Built inventory reservations with PostgreSQL row-level locking to prevent overselling.
-- Implemented idempotent payment operations and invoice expiration workflows.
-- Added audit logging, authentication, and security controls.
-- Configured background jobs with ARQ and Redis.
-- Set up CI/CD with GitHub Actions and automated deployment to a VPS.
+**Платформа оптовой торговли для компаний**
 
-### [Video Analytics Bot](https://github.com/MrGrose/video-analytics-bot)
-*Telegram bot for querying analytics using natural language.*
-- Integrated DeepSeek to convert natural-language questions into SQL queries.
-- Connected the bot to PostgreSQL for analytics data retrieval.
-- Built the application using Python and aiogram.
+Самостоятельно разработал B2B-платформу: компании-клиенты, каталог товаров, корзина, счета, складские остатки, резервы и финансовые операции. Backend построен как модульный монолит на FastAPI. Административный интерфейс и личный кабинет используют ту же бизнес-логику, что и JSON API.
 
+- Разделил приложение на доменные модули: компании, каталог, корзина, счета, склад, финансы, платежи, авторизация и аудит.
+- Реализовал конкурентное создание счетов с PostgreSQL row-level locking (`SELECT FOR UPDATE`) и фиксированным порядком блокировок для защиты от deadlock.
+- Организовал резервирование товара при выставлении счёта: корзина не меняет складские остатки, просроченный счёт освобождает резерв, а фактическое списание происходит при отгрузке.
+- Добавил идемпотентное подтверждение оплаты через `Idempotency-Key`.
+- Реализовал журнал складских движений и финансовые отчёты на основе снимков цен и реквизитов на момент выставления счёта.
+- Настроил server-side sessions, Argon2id, httpOnly cookies, CSRF-защиту и rate limit с fail-closed поведением при недоступности Redis.
+- Вынес периодические операции в фоновые задачи ARQ.
+- Настроил CI: Ruff, pytest, проверка Alembic, сборка Docker-образа и публикация в GHCR.
+- Подготовил **45 pytest-модулей** для проверки счетов, резервирования, авторизации и безопасности.
 
+**Стек:** Python, FastAPI, SQLAlchemy (async), PostgreSQL, Alembic, Redis, ARQ, Argon2id, Jinja2, HTMX, Docker Compose, GitHub Actions, pytest.
 
-### [NutriBot](https://github.com/MrGrose/NutriBot)
-*Local RAG assistant for document-based question answering.*
-- Built a document retrieval pipeline using LangChain and FAISS.
-- Processed uploaded documents, generated embeddings, and retrieved relevant context.
-- Used local language models through Ollama to generate answers based on retrieved information.
+### [RAG Platform](https://github.com/MrGrose/rag-platform)
+**Мультитенантный сервис поиска по документам**
 
-### [Pillstore]()
-*E-commerce backend built with FastAPI.*
-- Developed backend functionality for an online store, including user authentication, shopping cart, and order management.
-- Implemented administrative functionality for managing store operations.
-- Integrated Telegram Mini App with the backend.
-- Built API endpoints to support storefront functionality and user interactions.
+Backend RAG-сервиса для ответов на вопросы по документам с проверяемыми ссылками на источники. Сервис объединяет загрузку и индексацию документов, векторный и полнотекстовый поиск, ранжирование фрагментов и генерацию ответа языковой моделью.
+
+- Реализовал обработку документов: извлечение текста из PDF и других форматов, chunking, генерация embeddings и индексация.
+- Организовал гибридный поиск на PostgreSQL: `pgvector` для векторного поиска и полнотекстовый поиск для лексического совпадения.
+- Добавил объединение результатов через score fusion и этап reranking.
+- Реализовал проверку цитат, чтобы ссылки в ответах соответствовали найденным фрагментам документов.
+- Разделил данные по организациям и базам знаний, добавил API-ключи на уровне организации.
+- Ограничил конкуренцию и бюджет LLM-запросов на чат через Redis.
+- Вынес фоновую индексацию в ARQ и transactional outbox.
+- Добавил асинхронные evaluation-прогоны на датасетах для оценки качества поиска.
+- Разделил приложение на domain, application, infrastructure и API; предусмотрел сменные адаптеры embeddings и файловых хранилищ, включая Ollama и S3/MinIO.
+
+**Стек:** Python, FastAPI, PostgreSQL, pgvector, полнотекстовый поиск, Redis, ARQ, embeddings, reranking, LLM API, Ollama, S3/MinIO.
+
+## Другие проекты
+
+### [Eventflow](https://github.com/MrGrose/eventflow) — событийный backend обработки заказов
+
+Инженерный проект для изучения и реализации надёжной событийной архитектуры. В нём реализованы transactional outbox, отдельный publisher worker, переключение между RabbitMQ и Kafka через конфигурацию, retry, DLQ, ручное подтверждение ACK/commit и идемпотентные consumers. Используется семантика at-least-once с явной обработкой повторной доставки. Для наблюдаемости подключены Prometheus и Grafana.
+
+### ERP-OMS-WMS — backend системы управления заказами и складом
+
+Backend MVP, объединяющий функциональность ERP, OMS и WMS. Модульный монолит на FastAPI разделён на **14 доменных областей**. Inventory — единственный компонент, который изменяет `on_hand` и `reserved`; остальные домены проводят складские операции через его сервисы.
+
+Реализованы жизненный цикл заказа, конкурентное резервирование, идемпотентная обработка платёжных webhook, частичные отгрузки, закупки, приёмка товаров, межскладские перемещения, возвраты, отчётность и аудит. По документации проекта — **7 миграций Alembic и 28 тестов**: 22 запускаются по умолчанию и 6 предназначены для PostgreSQL integration.
+
+Это MVP backend-системы, а не production-hardened продукт.
+
+### [PillStore](https://github.com/MrGrose/Pillstore) — интернет-магазин на FastAPI
+
+Самостоятельный e-commerce-проект с ролями покупателей и продавцов, каталогом с русско- и англоязычным поиском, фильтрами, корзиной, заказами и административным интерфейсом. Есть сбор данных о товарах, автоматический перевод и интеграция с Telegram, включая привязку аккаунта и Mini App.
+
+**Стек:** Python 3.12, FastAPI, SQLAlchemy 2, PostgreSQL, Alembic, Pydantic, JWT, Playwright, BeautifulSoup, Jinja2, Docker, Poetry, aiogram, aiohttp.
+
+### Небольшие проекты и эксперименты
+
+- [Video Analytics Bot](https://github.com/MrGrose/video-analytics-bot) — Telegram-бот, который преобразует вопросы на естественном языке в SQL-запросы с помощью LLM и получает аналитические данные из PostgreSQL.
+- [NutriBot](https://github.com/MrGrose/NutriBot) — локальный RAG-ассистент для работы с документами на LangChain, FAISS, embeddings и Ollama.
+
+## Технологии
+
+- **Backend:** Python, FastAPI, Django, Django REST Framework, SQLAlchemy, Pydantic, asyncio
+- **Базы данных и поиск:** PostgreSQL, Redis, pgvector, Qdrant, FAISS
+- **Фоновые задачи:** RQ, ARQ, async workers, scheduled jobs
+- **Интеграции:** REST API, HTTPX, aiohttp, Playwright, aiogram
+- **AI/LLM:** RAG, embeddings, LangChain, LiteLLM, DeepSeek, OpenRouter, Ollama
+- **Инфраструктура:** Docker, Docker Compose, Linux, Nginx, GitHub Actions, GitLab CI/CD
+- **Качество и инструменты:** pytest, Alembic, Ruff, mypy, OpenAPI, Git
+
+## Инженерные интересы
+
+- Архитектура backend-приложений и доменная бизнес-логика
+- Транзакции PostgreSQL, блокировки и конкурентный доступ к данным
+- Идемпотентность, transactional outbox и надёжная фоновая обработка
+- Производительность SQL-запросов и проектирование схем данных
+- Интеграции с внешними API и автоматизация бизнес-процессов
+- Практическое применение LLM, RAG, гибридного поиска и reranking
 
 ---
-### Engineering Focus
 
-I am particularly interested in:
-  - Backend architecture and domain-driven business logic.
-  - Reliable payment and order processing.
-  - Database performance and transaction management.
-  - Asynchronous systems and background job processing.
-  - API integrations and automation.
-  - Practical applications of LLMs and retrieval-augmented generation.
+<a href="mailto:grachev.backend@gmail.com">grachev.backend@gmail.com</a>
 
----
 
-## Contacts
-
-- Email: [grachev.backend@gmail.com](mailto:grachev.backend@gmail.com)
 
